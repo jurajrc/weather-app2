@@ -16,16 +16,18 @@ const StyleSky = styled.article`
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    position: relative;
     //border: 1px solid #000;
     img {
         filter: grayscale(1);
+        transform: scale(0.75);
     }
     p {
       font-size: 1.125em;
       font-weight: 500;
-      position: relative;
-      top: -1.4em;
       letter-spacing: -0.05em;
+      position: absolute;
+      bottom: 0.5em;
     }
 `
 
