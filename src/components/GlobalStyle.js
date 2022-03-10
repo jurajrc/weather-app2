@@ -13,6 +13,15 @@ const GlobalStyle = createGlobalStyle`
         background: #fff;
         font-family: 'Barlow', sans-serif;
         overflow-x: hidden;
+
+        .background {
+            width: 100%;
+
+            img {
+                width: 100%;
+                height: auto;
+            }
+        }
     }
 
     a {
