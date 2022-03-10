@@ -1,7 +1,22 @@
+
+// format time hh:mm AM/PM
 export const sunn = (sec) => {
     const date = new Date(sec * 1000)
     const timestr = date.toLocaleTimeString(['en-US'], { hour: '2-digit', minute: '2-digit' })
     return timestr
+}
+
+/**
+ * formating date day "Mon, 05"
+ * @param {number} sec 
+ * @returns string 
+ */
+export const dateDay = (sec) => {
+  const date = new Date(sec * 1000)
+    const timestr = date.toLocaleDateString(['en-US'], {  weekday: 'short', day: '2-digit' })
+    const array = timestr.split(" ").reverse()
+    const newString = `${array[0]}, ${array[1]}`
+    return newString
 }
 
 // zmena čisla na string a nahradiť . za ,
