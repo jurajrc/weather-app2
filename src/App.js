@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useLocation } from 'react-router-dom';
 import {coordsTown} from './coordsTown'
 // API
 import { api_geo, api_coord } from './api';
@@ -9,27 +9,52 @@ import Home from './pages/Home';
 import SearchForm from './pages/SearchForm';
 // Style
 import GlobalStyle from './components/GlobalStyle';
+// Animation
+import { AnimatePresence } from 'framer-motion';
 // images
-import graphic from './images/graphic.svg'
-
+import graphic_w511 from './images/grafic-511x413.webp'
+import graphic_w1080 from './images/grafic-1080x607.webp'
+import graphic_w1920 from './images/grafic-1920x1080.webp'
+import graphic_w2560 from './images/grafic-2560x1440.webp'
+ 
 function App() {
 
-  const [coord, setCoord] = useState(null)
+  const [coord, setCoord] = useState({name: 'Košice', lat: 48.717, lon: 21.250})
   const [location, setLocation] = useState("")
   const [foundData, setFoundData] = useState(null)
   const [findTowns, setFindTowns] = useState(coordsTown)
-  //const [day, setDay] = useState('')
-  //const [time, setTime] = useState('')
-
-
+  const [size , setSize] = useState([ window.innerWidth])
+  
   useEffect( () => {
-    getCoords("košice")
-  }, [])
+    getData(coord)
+  }, [coord])
 
+  useEffect(() => {
+    if(location !== "") {
+      getCoords(location)
+    }
+  }, [location])
+
+  // state resize
+  function useWindowSize() {
+    useEffect(() => {
+      const handleResize = () => {
+        setSize([ window.innerWidth])
+      }
+      window.addEventListener("resize", handleResize)
+      return () => {
+        window.removeEventListener("resize", handleResize)
+      }
+    })
+  return size
+  }
+  const [width] = useWindowSize()
+
+  // response data coords specific location
   const getCoords = async (term) => {
     await axios.get(api_geo(term))
     .then(data => {
-      console.log(data.data);
+      //console.log(data.data);
       setCoord({
         name: data.data[0].name,
         lat: data.data[0].lat.toFixed(3),
@@ -39,80 +64,63 @@ function App() {
     .catch(err => console.log(err))
   }
 
-  useEffect( async () => {
+  // response data current weather and forecast for 7 days
+  const getData = async (coord) => {
     await axios.get(api_coord(coord))
     .then(data => {
       //console.log(data.data);
       setFoundData(data.data)
     })
     .catch(err => console.log(err))
-    
-  }, [coord])
-
-  useEffect(() => {
-    if(location !== "") {
-      getCoords(location)
-    }
-  }, [location])
-
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    if(location !== "") {
-      getCoords(location)
-      setLocation("")
-    }
   }
 
-  const sunn = (sec) => {
-    const date = new Date(sec * 1000)
-    const timestr = date.toLocaleTimeString(['en-US'], { hour: '2-digit', minute: '2-digit' })
-
-    return timestr
+  // click from item town in SearchForm.jsx
+  const handleOnClick = () => {
+    if(location !== "") {
+      getCoords(location)
+    }
   }
   
+  // filtered from my towns and upgrade state findTowns
   const handleFilter = (e) => {
-    const filter = coordsTown.filter(item => item.town.includes(e.target.value))
-    console.log(filter);
+    const filter = coordsTown.filter(item => item.town.toLocaleLowerCase().includes(e.target.value.toLocaleLowerCase()))
     setFindTowns(filter)
   }
+
+  const locationRouter = useLocation()
 
   return (
     <>
     <GlobalStyle />
     <div className="App">
       <div className="background">
-        <img src={graphic} alt="pozadie" />
+        <picture>
+          <source media='(max-width: 500px)' srcSet={graphic_w511} />
+          <source media='(max-width: 1000px)' srcSet={graphic_w1080} />
+          <source media='(max-width: 1900px)' srcSet={graphic_w1920} />
+          <img src={graphic_w2560} alt="pozadie" />
+        </picture>
       </div>
+      <AnimatePresence exitBeforeEnter>
+        <Routes location={locationRouter} key={locationRouter.pathname} >
+          <Route path='/' element={ <Home 
+            coord={coord}
+            foundData={foundData}
+            setFindTowns={setFindTowns}
+          /> } 
+          />
 
-      <Routes>
-        <Route path='/' element={ <Home 
-          coord={coord}
-          foundData={foundData}
-          setFindTowns={setFindTowns}
-        /> } 
-        />
-
-        <Route path='/search' element={ 
-          <SearchForm 
-            hadleFilter={handleFilter}
-            findTowns={findTowns}
-            setLocation={setLocation}
-            location={location}
-            handleSubmit={handleSubmit}
-          /> 
-        } />
-      </Routes>
-
-      
-      {/* <form onSubmit={handleSubmit} >
-        <input 
-          type="text"
-          onChange={e => setLocation(e.target.value)}
-          value={location}
-          placeholder="Location"
-        />
-      </form> */}
-
+          <Route path='/search' element={ 
+            <SearchForm 
+              hadleFilter={handleFilter}
+              findTowns={findTowns}
+              setLocation={setLocation}
+              location={location}
+              handleOnClick={handleOnClick}
+            /> 
+          } />
+        </Routes>
+      </AnimatePresence>
     </div>
     </>
   );
