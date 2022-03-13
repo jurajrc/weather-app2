@@ -1,5 +1,9 @@
 
-// format time hh:mm AM/PM
+/**
+ * format time hh:mm AM/PM
+ * @param {UTC} sec 
+ * @returns string
+ */
 export const sunn = (sec) => {
     const date = new Date(sec * 1000)
     const timestr = date.toLocaleTimeString(['en-US'], { hour: '2-digit', minute: '2-digit' })
@@ -19,7 +23,13 @@ export const dateDay = (sec) => {
     return newString
 }
 
-// zmena čisla na string a nahradiť . za ,
+/**
+ * zmena čisla na string a nahradiť '.' za ','
+ * @param {number} number 
+ * @param {string} before 
+ * @param {string} after 
+ * @returns string
+ */
 export const replaceComma = (number, before, after) => number.toString().replace(before, after)
 
 // prepočet m/s na km/h + zaokruhlenie
