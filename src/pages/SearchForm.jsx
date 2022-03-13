@@ -1,15 +1,31 @@
-import React from 'react'
+import React  from 'react'
 import { Link } from 'react-router-dom'
 import places_black from '../images/places_black.svg'
 // Style
 import styled from 'styled-components'
 import { theme } from '../components/Theme'
+// Animation
+import { motion } from 'framer-motion'
 
-const SearchForm = ({ hadleFilter, findTowns, setLocation, handleSubmit }) => {
+
+const SearchForm = ({ 
+  hadleFilter, 
+  findTowns, 
+  setLocation, 
+  handleOnClick 
+}) => {
+
+
   return (
-    <StyleSearch>
+    <StyleSearch 
+      animate={{opacity: 1, y: '0%'}}
+      initial={{opacity: 0, y: '100%'}}
+      exit={{opacity: 0, y: '100%'}}
+      transition={{ duration: 0.5 }}
+    >
 
         <p className='title'>Location</p>
+
         <form onSubmit={e => e.preventDefault()}>
           <input 
             type="text"
@@ -17,19 +33,25 @@ const SearchForm = ({ hadleFilter, findTowns, setLocation, handleSubmit }) => {
             onChange={hadleFilter}
             
           />
-            <img src={places_black} alt="places" />
+          <img src={places_black} alt="places" />
         </form>
 
         <ul className='my-towns'>
           {findTowns.map((item, index) => (
-            <li key={index} onClick={() => {setLocation(item.town); handleSubmit() }} ><Link to="/"  ><p className='town'>{item.town}</p> <span>{item.temp}°C</span> </Link></li>
+            <li 
+              key={index} 
+              onClick={() => {setLocation(item.town); handleOnClick() }} >
+                <Link 
+                  to="/"  ><p className='town'>{item.town}</p> <span className='temp'>{item.temp}°C</span> 
+                </Link>
+            </li>
           ))}  
         </ul> 
 
       </StyleSearch>
   )
 }
-const StyleSearch = styled.section`
+const StyleSearch = styled(motion.section)`
     width: 100%;
     min-height: 94vh;
     background-color: #fff;
@@ -75,15 +97,21 @@ const StyleSearch = styled.section`
       li {
         a {
           font-size: 1.125em;
+          font-weight: 400;
+          letter-spacing: -0.05em;
           width: 100%;
-          margin: 0.1em 0;
-          padding: 0.3em 0;
+          padding: 0.45em 0;
           display: flex;
           justify-content: space-between;
           color: #666;
 
           .town {
             color: #444;
+          }
+          .temp {
+            font-size: 1rem;
+            font-weight: 300;
+            letter-spacing: 0em;
           }
         }
       }
