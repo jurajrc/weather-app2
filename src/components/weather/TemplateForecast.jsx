@@ -31,8 +31,14 @@ const StyleTemplateForcast = styled(StyleTemplate)`
     img {
         width: 50%;
     }
+
     .min-max {
         display: flex;
+        @media (min-width: 500px) {
+            p {
+                font-size: 0.8em;
+            }
+        }
 
         .max,
         .min {
@@ -40,11 +46,14 @@ const StyleTemplateForcast = styled(StyleTemplate)`
             letter-spacing: 0.1em;
             font-weight: 500;
         }
+
         img {
             margin-left: 0.1em;
         }
+
         .min {
             margin-left: 0.4em;
+            
             img {
                 transform: rotate(180deg);
             }

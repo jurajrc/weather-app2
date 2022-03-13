@@ -18,5 +18,10 @@ export const StyleTemplate = styled.article`
         font-size: 0.5em;
         letter-spacing: 0.1em;
         color: ${theme.lightPrimariFontColor};
+        @media (min-width: 500px) {
+            
+            font-size: 0.8em;
+        
+        }
     }
 `

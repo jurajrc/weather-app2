@@ -5,5 +5,7 @@ export const theme = {
 
     lightPrimariBackColor: '#fff',
 
+    letterSpacing: '-0.05em'
+
 
 }

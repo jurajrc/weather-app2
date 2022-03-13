@@ -30,6 +30,7 @@ const StyleMinMax = styled.article`
     .max,
     .min {
       display: flex;
+      padding: 0.375em 0;
       img {
         transform: scale(1.1);
         margin-left: 2px;

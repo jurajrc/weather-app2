@@ -36,6 +36,10 @@ const StyleHeader = styled.header`
     font-size: 0.875em;
     color: ${theme.lightPrimariFontColor};
     margin-left: 0.4em;
+    @media (min-width: 500px) {
+      font-size: 1em;
+      margin-left: 1em;
+    }
   }
 
   .coord {
