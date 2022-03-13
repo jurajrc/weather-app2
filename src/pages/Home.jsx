@@ -1,57 +1,119 @@
-import React, { useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useState } from 'react'
+// Components
+import Header from '../components/Header'
+import Sky from '../components/weather/Sky'
+import Temp from '../components/weather/Temp'
+import TempMinMax from '../components/weather/TempMinMax'
+import TemplateAnyWeather from '../components/weather/TemplateAnyWeather'
+import TemplateForecast from '../components/weather/TemplateForecast'
 // Style
 import styled from 'styled-components'
-import places_blue from '../images/places-blue.svg'
-import { theme } from '../components/Theme'
+// Animate
+import { motion } from 'framer-motion'
 // units
-import { sunn, replaceComma, msTokmh, dayTime } from '../units'
-import moment from 'moment'
-import { coordsTown } from '../coordsTown'
+import { sunn, replaceComma, msTokmh, dayTime, dateDay } from '../units'
+// Images
+import humidity_img from '../images/humidity.svg'
+import barometer_img from '../images/barometer.svg'
+import wind_img from '../images/wind-1.svg'
+import sunrice_img from '../images/sunrise.svg'
+import sunset_img from '../images/sunset.svg'
+import sand_clock_img from '../images/sand-clock.svg'
 
 const Home = ({ coord, foundData, setFindTowns }) => {
 
-    useEffect(() => {
-      setFindTowns(coordsTown)
-    },[])
+    // array for tree day forecast
+    const [forcastArray] = useState([1, 2, 3])
 
   return (
-    <StyleHome>
-        <header>
-            <div className="date">
-                <p>{moment().format('dddd, D MMM YYYY | h:mm A')}</p>
-            </div>
-
-            {coord && (
-            <div className="coord">
-            <Link to="/search">{coord.name}, Slovakia</Link>
-            <img src={places_blue} alt="places" />
-            </div>
-            )}
-        </header>
-
+    <StyleHome
+        animate={{opacity: 1}}
+        initial={{opacity: 0}}
+        exit={{opacity: 0}}
+        transition={{ duration: 0.3 }}
+    >
+        <Header setFindTowns={setFindTowns} coord={coord}/>
+        
         <div className="results-weather">
             {foundData && 
                 <div className="foundData">
-                <img src={`http://openweathermap.org/img/wn/${foundData.current.weather[0].icon}@2x.png`} alt="icon" /> 
-                <p className="description">{foundData.current.weather[0].description}</p>
-                <div className="temp" style={{display: 'flex'}}><h1 style={{margin: 0}}>{replaceComma(foundData.current.temp, '.', ',')}</h1>°C</div>
+                    <div className="row-01">
+                        <Sky
+                            img={foundData.current.weather[0].icon} 
+                            main={foundData.current.weather[0].main} 
+                        />
 
-                <p>Humidity-Vlhkosť {foundData.current.humidity}%</p>
-                <p>Pressure {replaceComma(foundData.current.pressure / 1000, '.', ',')}mBar</p>
-                <p>Wind-vietor {msTokmh(foundData.current.wind_speed)} km/h</p>
+                        <Temp temp={replaceComma(Math.round(foundData.current.temp), '.', ',')} />
+                        <TempMinMax 
+                            max={Math.round(foundData.daily[0].temp.max)}
+                            min={Math.round(foundData.daily[0].temp.min)} />
+                    </div>
 
-                <p>Východ slnka {sunn(foundData.current.sunrise)}</p>  
-                <p>Západ slnka {sunn(foundData.current.sunset)}</p>
-                
-                <p>Daytime {dayTime(foundData.current.sunset, foundData.current.sunrise)}</p>
+                    <div className="row-02">
+                        <TemplateAnyWeather 
+                            img={humidity_img}
+                            value={foundData.current.humidity + "%"}
+                            description="Humidity"
+                        />    
+                        <TemplateAnyWeather 
+                            img={barometer_img}
+                            value={replaceComma(foundData.current.pressure / 1000, '.', ',') + " mBar"}
+                            description="Pressure"
+                        />    
+                        <TemplateAnyWeather 
+                            img={wind_img}
+                            value={msTokmh(foundData.current.wind_speed) + " km/h"}
+                            description="Wind"
+                        />    
+                    </div>
+
+                    <div className="row-03">
+                        <TemplateAnyWeather 
+                            img={sunrice_img}
+                            value={sunn(foundData.current.sunrise)}
+                            description="Sunrice"
+                        /> 
+                        <TemplateAnyWeather 
+                            img={sunset_img}
+                            value={sunn(foundData.current.sunset)}
+                            description="Sunset"
+                        /> 
+                        <TemplateAnyWeather 
+                            img={sand_clock_img}
+                            value={dayTime(foundData.current.sunset, foundData.current.sunrise)}
+                            description="Daytime"
+                        /> 
+                    </div>
+
+                    {/* <div className="row-04 test">
+                        {[...Array(3)].map((_, index) => (
+                            <TemplateForecast key={index}
+                                img={foundData.daily[index + 1].weather[0].icon}
+                                value={dateDay(foundData.daily[index + 1].dt)}
+                                max={Math.round(foundData.daily[index + 1].temp.max)}
+                                min={Math.round(foundData.daily[index + 1].temp.min)}
+                            />
+                        ))}
+                    </div> */}
+
+                    <div className="row-04">
+                        {forcastArray.map( item => (
+                            <TemplateForecast key={item}
+                            img={foundData.daily[item].weather[0].icon}
+                            value={dateDay(foundData.daily[item].dt)}
+                            max={Math.round(foundData.daily[item].temp.max)}
+                            min={Math.round(foundData.daily[item].temp.min)}
+                            />
+                        ))}
+                    </div>
+
                 </div>
             }
         </div>
     </StyleHome>
   )
 }
-const StyleHome = styled.section`
+const StyleHome = styled(motion.section)`
     width: 100%;
     background-color: #fff;
     box-shadow: 0px -16px 40px rgba(0, 0, 0, 0.2);
@@ -60,33 +122,26 @@ const StyleHome = styled.section`
     border-radius: 1em 1em 0 0;
     overflow: hidden;
 
-    header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-
-        .date {
-            font-size: 0.875em;
-            color: ${theme.lightPrimariFontColor};
-            margin-left: 0.4em;
-        }
-        .coord {
+    .foundData {
+        width: 100%;
+        .row-01,
+        .row-02,
+        .row-03 {
             display: flex;
-            align-items: center;
-            background: rgba(13, 159, 234, 0.08);
-            padding: 0.4em;
-            border-radius: 0 1em 0 1em;
-;
-            a {
-                color: ${theme.lightLinkFontcolor};
-                padding: 0.6em 0;
-            }
-            img {
-                margin: 0 0.6em;
-            }
+            padding-top: 1em;
+        }
+        .row-04 {
+            display: flex;
+            justify-content: space-evenly;
+            padding: 1em 0 2em;
+        }
+
+        .forcast {
+            background: #FFFFFF;
+            box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.1);
+            border-radius: 1em;    
         }
     }
 `
-
 
 export default Home
