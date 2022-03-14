@@ -3,7 +3,6 @@ import graphic_w1080 from '../images/grafic-1080x607.webp'
 import graphic_w1920 from '../images/grafic-1920x1080.webp'
 import graphic_w2560 from '../images/grafic-2560x1440.webp'
 
-
 const GlobalStyle = createGlobalStyle`
     * {
         margin: 0;
@@ -31,7 +30,7 @@ const GlobalStyle = createGlobalStyle`
             background-position: top right;
             background-size: cover;
         }
-        @media (min-height: 510px) {
+        @media screen and (min-height: 620px) and (min-width: 700px) {
             overflow: hidden;
         }
 

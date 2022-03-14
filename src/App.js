@@ -15,7 +15,6 @@ import { AnimatePresence } from 'framer-motion';
 import graphic_w511 from './images/grafic-511x413.webp'
 import graphic_w1080 from './images/grafic-1080x607.webp'
 import graphic_w1920 from './images/grafic-1920x1080.webp'
-import graphic_w2560 from './images/grafic-2560x1440.webp'
  
 function App() {
 
@@ -87,20 +86,22 @@ function App() {
     setFindTowns(filter)
   }
 
+  // necessary for animations when changing subpages
   const locationRouter = useLocation()
 
   return (
     <>
     <GlobalStyle />
     <div className="App">
+
       <div className="background">
         <picture>
           <source media='(max-width: 500px)' srcSet={graphic_w511} />
           <source media='(max-width: 1000px)' srcSet={graphic_w1080} />
-          <source media='(max-width: 1900px)' srcSet={graphic_w1920} />
-          <img src={graphic_w2560} alt="pozadie" />
+          <img src={graphic_w1920} alt="pozadie" />
         </picture>
       </div>
+
       <AnimatePresence exitBeforeEnter>
         <Routes location={locationRouter} key={locationRouter.pathname} >
           <Route path='/' element={ <Home 
@@ -122,6 +123,7 @@ function App() {
           } />
         </Routes>
       </AnimatePresence>
+
     </div>
     </>
   );
