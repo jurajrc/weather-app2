@@ -125,6 +125,7 @@ const StyleHome = styled(motion.section)`
     @media (min-width: 700px) {
         min-width: 40em;
         background: rgba(255, 255, 255, 0.8);
+        backdrop-filter: blur(5px);
         top: 0em;
         border-radius: 1em;
     }
