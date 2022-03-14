@@ -4,6 +4,8 @@ import moment from 'moment'
 // Style
 import styled from 'styled-components'
 import { theme } from '../components/Theme'
+// Animation 
+import { motion } from 'framer-motion'
 // My location
 import { coordsTown } from '../coordsTown'
 // Images
@@ -20,7 +22,11 @@ const Header = ({ coord, setFindTowns }) => {
         {coord && (
           <>
             <Link to="/search" onClick={() => setFindTowns(coordsTown)} >{coord.name}, Slovakia</Link>
-            <img src={places_blue} alt="places" />
+            <motion.img
+              animate={{y: [2, -2]}}
+              //transition={{ duration: 0.5, repeat: Infinity, repeatType: 'reserve' , ease: "easeOut", delay: 1 }}
+              transition={{ duration: 0.5, yoyo: Infinity, ease: "easeOut",delay: 1 }}
+              src={places_blue} alt="places" />
           </>
         )}
       </div>
@@ -55,6 +61,9 @@ const StyleHeader = styled.header`
       background: rgba(13, 159, 234, 0.2);
       padding: 0.4em 1em;
     }
+    @media (max-width: 360px) {
+      font-size: 0.9em;
+    }
 
     a {
       color: ${theme.lightLinkFontcolor};
@@ -64,6 +73,9 @@ const StyleHeader = styled.header`
 
     img {
       margin: 0 0.6em;
+      @media (max-width: 373px) {
+        margin: 0 0.2em;
+      }
     }
   }
 `
