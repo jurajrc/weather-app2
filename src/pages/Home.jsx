@@ -23,7 +23,7 @@ import sand_clock_img from '../images/sand-clock.svg'
 const Home = ({ coord, foundData, setFindTowns }) => {
 
     // array for tree day forecast
-    const [forcastArray] = useState([1, 2, 3])
+    const [forecastArray] = useState([1, 2, 3])
 
   return (
     <StyleHome
@@ -97,7 +97,7 @@ const Home = ({ coord, foundData, setFindTowns }) => {
                     </div> */}
 
                     <div className="row-04">
-                        {forcastArray.map( item => (
+                        {forecastArray.map( item => (
                             <TemplateForecast key={item}
                             img={foundData.daily[item].weather[0].icon}
                             value={dateDay(foundData.daily[item].dt)}
@@ -122,6 +122,16 @@ const StyleHome = styled(motion.section)`
     border-radius: 1em 1em 0 0;
     overflow: hidden;
 
+    @media (min-width: 700px) {
+        min-width: 40em;
+        background: rgba(255, 255, 255, 0.8);
+        top: 0em;
+        border-radius: 1em;
+    }
+    .results-weather {
+        width: 100%;
+    }
+
     .foundData {
         width: 100%;
         .row-01,
@@ -133,7 +143,7 @@ const StyleHome = styled(motion.section)`
         .row-04 {
             display: flex;
             justify-content: space-evenly;
-            padding: 1em 0 2em;
+            padding: 1em 0 1.8em;
         }
 
         .forcast {

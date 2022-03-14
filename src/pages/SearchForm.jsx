@@ -12,15 +12,17 @@ const SearchForm = ({
   hadleFilter, 
   findTowns, 
   setLocation, 
-  handleOnClick 
+  handleOnClick,
+  sizeWidth
 }) => {
 
 
   return (
     <StyleSearch 
       animate={{opacity: 1, y: '0%'}}
-      initial={{opacity: 0, y: '100%'}}
-      exit={{opacity: 0, y: '100%'}}
+      initial={sizeWidth < 700 ? {opacity: 0.5, y: '100%'} : {opacity: 0, y: '100%'} }
+      exit={sizeWidth < 700 ? {opacity: 0.5, y: '100%'} : {opacity: 0, y: '100%'}}
+
       transition={{ duration: 0.5 }}
     >
 
@@ -61,6 +63,19 @@ const StyleSearch = styled(motion.section)`
     border-radius: 1em 1em 0 0;
     overflow: hidden;
 
+    @media (min-width: 700px) {
+      width: 40em;
+      min-height: 50vh;
+      padding-bottom: 2em;
+      border-radius: 1em;
+      
+      position: static;
+
+      /* top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%); */
+    }
+
     .title {
         color: ${theme.lightPrimariFontColor};
         text-align: center;
@@ -91,7 +106,7 @@ const StyleSearch = styled(motion.section)`
         }
     }
     .my-towns {
-      padding: 0 2.2em;
+      padding: 0 1.6em;
       color: #444;
 
       li {
@@ -100,7 +115,7 @@ const StyleSearch = styled(motion.section)`
           font-weight: 400;
           letter-spacing: -0.05em;
           width: 100%;
-          padding: 0.45em 0;
+          padding: 0.45em 0.6em;
           display: flex;
           justify-content: space-between;
           color: #666;
@@ -108,6 +123,7 @@ const StyleSearch = styled(motion.section)`
           .town {
             color: #444;
           }
+
           .temp {
             font-size: 1rem;
             font-weight: 300;

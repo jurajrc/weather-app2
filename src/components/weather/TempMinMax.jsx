@@ -23,9 +23,11 @@ const StyleMinMax = styled.article`
     flex-direction: column;
     justify-content: center;
     align-items: flex-end;
-    //border: 1px solid #000;
     padding-right: 12%;
     color: #666;
+    @media (min-width: 500px) {
+      padding-right: 14%;
+    }
 
     .max,
     .min {

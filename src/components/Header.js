@@ -31,6 +31,9 @@ const StyleHeader = styled.header`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  background-color: #fff;
+  @media (min-width: 700px) {
+  }
 
   .date {
     font-size: 0.875em;
@@ -48,6 +51,10 @@ const StyleHeader = styled.header`
     background: rgba(13, 159, 234, 0.08);
     padding: 0.4em;
     border-radius: 0 1em 0 1em;
+    @media (min-width: 700px) {
+      background: rgba(13, 159, 234, 0.2);
+      padding: 0.4em 1em;
+    }
 
     a {
       color: ${theme.lightLinkFontcolor};

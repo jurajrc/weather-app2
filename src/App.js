@@ -48,7 +48,7 @@ function App() {
     })
   return size
   }
-  const [width] = useWindowSize()
+  const [sizeWidth] = useWindowSize()
 
   // response data coords specific location
   const getCoords = async (term) => {
@@ -117,6 +117,7 @@ function App() {
               setLocation={setLocation}
               location={location}
               handleOnClick={handleOnClick}
+              sizeWidth={sizeWidth}
             /> 
           } />
         </Routes>
