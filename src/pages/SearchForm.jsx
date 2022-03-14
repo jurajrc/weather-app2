@@ -5,7 +5,7 @@ import places_black from '../images/places_black.svg'
 import styled from 'styled-components'
 import { theme } from '../components/Theme'
 // Animation
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 
 
 const SearchForm = ({ 
@@ -33,22 +33,30 @@ const SearchForm = ({
             type="text"
             placeholder='Search city...'
             onChange={hadleFilter}
-            
+            autoFocus
           />
           <img src={places_black} alt="places" />
         </form>
 
-        <ul className='my-towns'>
+        <motion.ul layout className='my-towns'>
+          <AnimatePresence>
           {findTowns.map((item, index) => (
-            <li 
+            <motion.li 
+              layout
+              initial={{opacity: 0}}
+              animate={{opacity: 1}}
+              exit={{opacity: 0}}
+              transition={{duration: 0.3}}
+              
               key={index} 
               onClick={() => {setLocation(item.town); handleOnClick() }} >
                 <Link 
                   to="/"  ><p className='town'>{item.town}</p> <span className='temp'>{item.temp}°C</span> 
                 </Link>
-            </li>
-          ))}  
-        </ul> 
+            </motion.li>
+          ))}
+          </AnimatePresence>
+        </motion.ul> 
 
       </StyleSearch>
   )
@@ -63,17 +71,13 @@ const StyleSearch = styled(motion.section)`
     border-radius: 1em 1em 0 0;
     overflow: hidden;
 
-    @media (min-width: 700px) {
+    @media screen and (min-width: 700px) {
       width: 40em;
       min-height: 50vh;
       padding-bottom: 2em;
       border-radius: 1em;
       
       position: static;
-
-      /* top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%); */
     }
 
     .title {
@@ -119,9 +123,11 @@ const StyleSearch = styled(motion.section)`
           display: flex;
           justify-content: space-between;
           color: #666;
+          
 
           .town {
             color: #444;
+            transition: 300ms all ease;
           }
 
           .temp {
@@ -130,6 +136,15 @@ const StyleSearch = styled(motion.section)`
             letter-spacing: 0em;
           }
         }
+        @media screen and (min-width: 700px) {
+            &:hover {
+              background: #F3F3F3;
+              border-radius: 4px;
+            }
+            &:hover .town {
+              transform: translateX(5px);
+            }
+          }
       }
     }
 `
