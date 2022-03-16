@@ -22,7 +22,8 @@ function App() {
   const [location, setLocation] = useState("")
   const [foundData, setFoundData] = useState(null)
   const [findTowns, setFindTowns] = useState(coordsTown)
-  const [size , setSize] = useState([ window.innerWidth])
+  const [resetTowns, setResetTowns] = useState(null)
+  const [size, setSize] = useState([ window.innerWidth])
   
   useEffect( () => {
     getData(coord)
@@ -33,6 +34,32 @@ function App() {
       getCoords(location)
     }
   }, [location])
+
+
+  
+  // get temps for my towns
+  useEffect(() => {
+    getTemp(coordsTown)
+  }, [])
+
+  const getTemp = async (myTowns) => {
+    const currentData = []
+
+    for(let i = 0; i < myTowns.length; i++) {
+      await axios.get(api_coord(myTowns[i]))
+    .then(data => {
+      const currentTemp = Math.round(data.data.current.temp)
+      const newtown = { town: myTowns[i].town, temp: currentTemp }
+      currentData.push(newtown) 
+    })
+    .catch(err => console.log(err))
+    
+    }
+    setFindTowns(currentData)
+    setResetTowns(currentData)
+  }
+
+
 
   // state resize
   function useWindowSize() {
@@ -81,8 +108,8 @@ function App() {
   }
   
   // filtered from my towns and upgrade state findTowns
-  const handleFilter = (e) => {
-    const filter = coordsTown.filter(item => item.town.toLocaleLowerCase().includes(e.target.value.toLocaleLowerCase()))
+  const filterTown = (e) => {
+    const filter = resetTowns.filter(item => item.town.toLocaleLowerCase().includes(e.target.value.toLocaleLowerCase()))
     setFindTowns(filter)
   }
 
@@ -96,9 +123,9 @@ function App() {
 
       <div className="background">
         <picture>
-          <source media='(max-width: 500px)' srcSet={graphic_w511} />
-          <source media='(max-width: 1000px)' srcSet={graphic_w1080} />
-          <img src={graphic_w1920} alt="pozadie" />
+          <source media='(max-width: 500px)' srcSet={graphic_w511} width="511" height="413" />
+          <source media='(max-width: 1000px)' srcSet={graphic_w1080} width="1080" height="607" />
+          <img src={graphic_w1920} alt="pozadie" width="1920" height="1080" />
         </picture>
       </div>
 
@@ -108,19 +135,20 @@ function App() {
             coord={coord}
             foundData={foundData}
             setFindTowns={setFindTowns}
+            resetTowns={resetTowns}
           /> } 
-          />
+        />
 
           <Route path='/search' element={ 
             <SearchForm 
-              hadleFilter={handleFilter}
+              filterTown={filterTown}
               findTowns={findTowns}
               setLocation={setLocation}
               location={location}
               handleOnClick={handleOnClick}
               sizeWidth={sizeWidth}
             /> 
-          } />
+          }/>
         </Routes>
       </AnimatePresence>
 
