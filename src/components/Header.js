@@ -11,7 +11,7 @@ import { coordsTown } from '../coordsTown'
 // Images
 import places_blue from '../images/places-blue.svg'
 
-const Header = ({ coord, setFindTowns }) => {
+const Header = ({ coord, setFindTowns, resetTowns }) => {
   return (
     <StyleHeader>
       <div className="date">
@@ -21,7 +21,7 @@ const Header = ({ coord, setFindTowns }) => {
       <div className="coord">
         {coord && (
           <>
-            <Link to="/search" onClick={() => setFindTowns(coordsTown)} >{coord.name}, Slovakia</Link>
+            <Link to="/search" onClick={() => setFindTowns(resetTowns)} >{coord.name}, Slovakia</Link>
             <motion.img
               animate={{y: [2, -2]}}
               //transition={{ duration: 0.5, repeat: Infinity, repeatType: 'reserve' , ease: "easeOut", delay: 1 }}

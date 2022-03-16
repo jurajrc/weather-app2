@@ -20,7 +20,7 @@ import sunrice_img from '../images/sunrise.svg'
 import sunset_img from '../images/sunset.svg'
 import sand_clock_img from '../images/sand-clock.svg'
 
-const Home = ({ coord, foundData, setFindTowns }) => {
+const Home = ({ coord, foundData, setFindTowns, resetTowns }) => {
 
     // array for tree day forecast
     const [forecastArray] = useState([1, 2, 3])
@@ -32,7 +32,7 @@ const Home = ({ coord, foundData, setFindTowns }) => {
         exit={{opacity: 0}}
         transition={{ duration: 0.3 }}
     >
-        <Header setFindTowns={setFindTowns} coord={coord}/>
+        <Header setFindTowns={setFindTowns} coord={coord} resetTowns={resetTowns}/>
         
         <div className="results-weather">
             {foundData && 
