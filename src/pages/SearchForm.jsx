@@ -1,5 +1,6 @@
-import React  from 'react'
+import React, { useState }  from 'react'
 import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import places_black from '../images/places_black.svg'
 // Style
 import styled from 'styled-components'
@@ -9,30 +10,43 @@ import { motion, AnimatePresence } from 'framer-motion'
 
 
 const SearchForm = ({ 
-  hadleFilter, 
+  filterTown, 
   findTowns, 
   setLocation, 
   handleOnClick,
   sizeWidth
 }) => {
+  const [input, setInput] = useState()
 
+  const navigate = useNavigate()
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    setLocation(input)
+    // prepne na uvodnú route
+    navigate('/')
+  }
+
+  const handleInput = (e) => {
+    filterTown(e)
+    setInput(e.target.value)
+  }
 
   return (
     <StyleSearch 
       animate={{opacity: 1, y: '0%'}}
       initial={sizeWidth < 700 ? {opacity: 0.5, y: '100%'} : {opacity: 0, y: '100%'} }
       exit={sizeWidth < 700 ? {opacity: 0.5, y: '100%'} : {opacity: 0, y: '100%'}}
-
       transition={{ duration: 0.5 }}
     >
 
         <p className='title'>Location</p>
 
-        <form onSubmit={e => e.preventDefault()}>
+        <form onSubmit={handleSubmit}>
           <input 
             type="text"
             placeholder='Search city...'
-            onChange={hadleFilter}
+            onChange={handleInput}
             autoFocus
           />
           <img src={places_black} alt="places" />
@@ -50,9 +64,9 @@ const SearchForm = ({
               
               key={index} 
               onClick={() => {setLocation(item.town); handleOnClick() }} >
-                <Link 
-                  to="/"  ><p className='town'>{item.town}</p> <span className='temp'>{item.temp}°C</span> 
-                </Link>
+              <Link 
+                to="/"  ><p className='town'>{item.town}</p> <span className='temp'>{item.temp}°C</span> 
+              </Link>
             </motion.li>
           ))}
           </AnimatePresence>
@@ -123,7 +137,6 @@ const StyleSearch = styled(motion.section)`
           display: flex;
           justify-content: space-between;
           color: #666;
-          
 
           .town {
             color: #444;
