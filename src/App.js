@@ -18,7 +18,7 @@ import graphic_w1920 from './images/grafic-1920x1080.webp'
  
 function App() {
 
-  const [coord, setCoord] = useState({name: 'Košice', lat: 48.717, lon: 21.250})
+  const [coord, setCoord] = useState({name: 'Košice', lat: 48.717, lon: 21.250, country: 'SK'})
   const [location, setLocation] = useState("")
   const [foundData, setFoundData] = useState(null)
   const [findTowns, setFindTowns] = useState(coordsTown)
@@ -80,14 +80,14 @@ function App() {
   const getCoords = async (term) => {
     await axios.get(api_geo(term))
     .then(data => {
-      //console.log(data.data);
+      console.log(data.data);
       setCoord({
         name: data.data[0].name,
         lat: data.data[0].lat.toFixed(3),
-        lon: data.data[0].lon.toFixed(3)
+        lon: data.data[0].lon.toFixed(3),
+        country: data.data[0].country
       })
-    })
-    .catch(err => console.log(err))
+    }).catch(err => console.log(err))
   }
 
   // response data current weather and forecast for 7 days
@@ -96,8 +96,7 @@ function App() {
     .then(data => {
       //console.log(data.data);
       setFoundData(data.data)
-    })
-    .catch(err => console.log(err))
+    }).catch(err => console.log(err))
   }
 
   // click from item town in SearchForm.jsx
